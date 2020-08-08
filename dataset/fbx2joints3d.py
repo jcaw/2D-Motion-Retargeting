@@ -50,16 +50,17 @@ def set_homefile(filepath):
     cube = bpy.data.objects['Cube']
     bpy.data.objects.remove(cube)
 
-    bpy.data.objects['Lamp'].data.energy = 2
-    bpy.data.objects['Lamp'].data.type = 'HEMI'
+    bpy.data.objects['Light'].data.energy = 2
+    bpy.data.objects['Light'].data.type = 'SUN'
 
     bpy.data.scenes['Scene'].render.resolution_x = RESOLUTION[0]
     bpy.data.scenes['Scene'].render.resolution_y = RESOLUTION[1]
     bpy.data.scenes['Scene'].render.resolution_percentage = 100
 
-    bpy.data.worlds['World'].use_sky_blend = True
-    bpy.data.worlds['World'].horizon_color = (1, 1, 1)
-    bpy.data.worlds['World'].zenith_color = (1, 1, 1)
+    # TODO: Find an equivalent for blender 2.8? Might not be needed.
+    # bpy.data.worlds['World'].use_sky_blend = True
+    # bpy.data.worlds['World'].horizon_color = (1, 1, 1)
+    # bpy.data.worlds['World'].zenith_color = (1, 1, 1)
 
     bpy.ops.wm.save_as_mainfile(filepath=filepath)
 
@@ -101,7 +102,7 @@ def get_joint3d_positions(joint_names, frame_idx):
 
     out_dict = {'pose_keypoints_3d': []}
     for name in joint_names:
-        global_location = armature.matrix_world * posebones[name].matrix * Vector((0, 0, 0))
+        global_location = armature.matrix_world @ posebones[name].matrix @ Vector((0, 0, 0))
         l = [global_location[0], global_location[1], global_location[2]]
         out_dict['pose_keypoints_3d'].extend(l)
     return out_dict
