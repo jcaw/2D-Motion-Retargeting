@@ -117,6 +117,8 @@ def main():
 
     for char in character_names:
         fbx_dir = os.path.join(SRC_DATA_DIR, char)
+        if not os.path.isdir(fbx_dir): continue
+
         files = os.listdir(fbx_dir)
 
         if char == 'Ty':
